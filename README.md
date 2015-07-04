@@ -1,20 +1,20 @@
 # Tetris
 
-start empty world, with a random peice
-peice drops every t
-user can spin and straffe the peice
-when peice lands (collides), full rows are removed
-new peice comes down when peice lands
-stop when no space
+Start empty world, with a random peice.
+Peice drops every t.
+User can spin and straffe the peice.
+When peice lands (collides), full rows are removed.
+New peice comes down when peice lands.
+Stop when no space.
 
-svg
-keyboard input rotate l/r space
-matrix for screen/rules
-matrix (represeting the world)
--> matrix (next-step world)
-our peice
-x, y, rotation, matrix
-score
+* svg
+* keyboard input rotate l/r space
+* matrix for screen/rules
+* matrix (represeting the world)
+* -> matrix (next-step world)
+* our peice
+* x, y, rotation, matrix
+* score
 
     11
     11
