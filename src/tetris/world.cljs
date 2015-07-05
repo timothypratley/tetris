@@ -7,7 +7,7 @@
 (defn make-block-pile [x y]
   (vec (repeat x (vec (repeat y -1)))))
 
-(def peices
+(def pieces
   [[[0 0 0 0]
     [0 0 0 0]
     [1 1 1 1]
@@ -30,8 +30,8 @@
 (defn flip [matrix]
   (vec (reverse matrix)))
 
-(defn rand-peice []
-  (transpose (rand-nth peices)))
+(defn rand-piece []
+  (transpose (rand-nth pieces)))
 
 (def colors
   ["#181818"
@@ -46,24 +46,24 @@
    "#BA8BAF"
    "#A16946"])
 
-(defn with-new-peice [world]
-  (let [peice (rand-peice)]
+(defn with-new-piece [world]
+  (let [piece (rand-piece)]
     (assoc world
-           :x (- 5 (quot (count peice) 2))
+           :x (- 5 (quot (count piece) 2))
            :y 0
-           :peice peice
+           :piece piece
            :color (rand-int (count colors)))))
 
 (defn new-world []
-  (with-new-peice
+  (with-new-piece
     {:score 0
      :block-pile (make-block-pile 10 20)}))
 
-(defn valid-world? [{:keys [x y peice block-pile done]}]
+(defn valid-world? [{:keys [x y piece block-pile done]}]
   (every? #{-1}
-          (for [i (range (count peice))
-                j (range (count (first peice)))
-                :when (pos? (get-in peice [i j]))
+          (for [i (range (count piece))
+                j (range (count (first piece)))
+                :when (pos? (get-in piece [i j]))
                 :let [matrix-x (+ x i)
                       matrix-y (+ y j)]]
             (get-in block-pile [matrix-x matrix-y]))))
@@ -80,17 +80,17 @@
         (update-in [:score] + (* 10 cc cc))
         (assoc :block-pile (transpose (concat new-rows remaining-rows))))))
 
-(defn collect-peice [block-pile [x y color]]
+(defn collect-piece [block-pile [x y color]]
   (assoc-in block-pile [x y] color))
 
-(defn push-peice [{:as world :keys [peice color x y block-pile]}]
-  (let [peice-width (count peice)
-        peice-height (count (first peice))]
+(defn push-piece [{:as world :keys [piece color x y block-pile]}]
+  (let [piece-width (count piece)
+        piece-height (count (first piece))]
     (assoc world :block-pile
-           (reduce collect-peice block-pile
-                   (for [i (range peice-width)
-                         j (range peice-height)
-                         :when (pos? (get-in peice [i j]))]
+           (reduce collect-piece block-pile
+                   (for [i (range piece-width)
+                         j (range piece-height)
+                         :when (pos? (get-in piece [i j]))]
                      [(+ x i) (+ y j) color])))))
 
 (defn maybe-done [world]
@@ -100,9 +100,9 @@
 
 (defn landed [world]
   (-> world
-      push-peice
+      push-piece
       with-completed-rows
-      with-new-peice
+      with-new-piece
       maybe-done))
 
 (defn move-down [world]
@@ -125,7 +125,7 @@
   (update-in world [:x] inc))
 
 (defn rotate [world]
-  (update-in world [:peice] (comp transpose flip)))
+  (update-in world [:piece] (comp transpose flip)))
 
 (defn drop-to-ground [world]
   (landed (last (take-while valid-world? (iterate move-down world)))))

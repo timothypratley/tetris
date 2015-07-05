@@ -12,9 +12,9 @@
           :rx 0.1
           :fill (world/colors color)}])
 
-(defn board-view [{:keys [peice color x y block-pile done]}]
-  (let [peice-width (count peice)
-        peice-height (count (first peice))
+(defn board-view [{:keys [piece color x y block-pile done]}]
+  (let [piece-width (count piece)
+        piece-height (count (first piece))
         block-width (count block-pile)
         block-height (count (first block-pile))]
     [:svg {:style {:border "1px solid black"
@@ -22,10 +22,10 @@
                    :height 400}
            :view-box (string/join " " [0 0 10 20])}
      (when-not done
-       (into [:g {:name "current peice"}]
-                          (for [i (range peice-width)
-                                j (range peice-height)
-                                :when (pos? (get-in peice [i j]))]
+       (into [:g {:name "current piece"}]
+                          (for [i (range piece-width)
+                                j (range piece-height)
+                                :when (pos? (get-in piece [i j]))]
                             [block (+ x i) (+ y j) color])))
      (into [:g {:name "block pile"}]
            (for [i (range block-width)
@@ -42,11 +42,10 @@
    [:h2 [(if done :blink :span) "Score " score]]
    [:audio {:controls "true"
             :auto-play "true"
-            :loop "true"
-            :volume "0.2"}
-    [:source {:src "https://archive.org/download/TetrisThemeMusic/Tetris.ogg"
+            :loop "true"}
+    [:source {:src "https://archive.org/download/Tetris_570/Tetris.ogg"
               :type "audio/ogg"}]
-    [:source {:src "https://archive.org/download/TetrisThemeMusic/Tetris.mp3"
+    [:source {:src "https://archive.org/download/Tetris_570/Tetris.mp3"
               :type "audio/mpeg"}]
     "Your browser does not support the audio element."]
    [:br]
